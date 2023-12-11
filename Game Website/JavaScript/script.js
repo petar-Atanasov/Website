@@ -40,9 +40,9 @@ function validationRegister(){
     }
 }
 // Register local storage 
-buton.addEventListener("click", storeUSer);
-function storeUser(event){
-     event.preventDefault();
+button.addEventListener("click", storeUSer);
+function storeUser(/*event*/){
+     // event.preventDefault();
 
     // DOM elements 
     var userName = document.formInput.Username.value;
