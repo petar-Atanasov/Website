@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../CSS/home.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <title> Login Page </title>
+</head>
+<body>
+    <header> 
+        <!-- logo image connected to home page -->
+        <a class="logoHeader" href="../Home/home.html">
+            <img class="logo" src="../../images/logo-unscreen.gif" alt="Ice Run coin logo">
+        </a>
+        <!-- connecting web pages-->
+        <nav class="webPages"> 
+            <a class="webPage" href="login.html"> Login </a>
+            <a class="webPage" href="../Game Page/game-page.html"> Game </a>
+            <a class="webPage" href="../Ranking/ranking.html"> Leaderboard </a>
+            <a class="webPage" href="../About us/about-us.html"> About Us </a>
+            <a class="webPage" href="../Help/help.html"> Help </a>
+        </nav>
+    </header>
+    <main class="mainLogin">
+        <!-- This is the login-->
+        <div id="loginWrapper">
+            <div class="form-box">
+                <form  action="" name="formInput" onsubmit="return validationLogin()">
+                    <h2> Login </h2>
+                    <p id="result"></p>
+                        <div class="input-box">
+                            <i class="bx bxs-user"></i>
+                            <input  type="text"  name="Username" placeholder="Username">
+                        </div>
+                        <div class="input-box">
+                            <i class="bx bxs-lock-alt"></i>
+                            <input type="password"  name="Password" placeholder="Password">
+                        </div>
+                        <p> Doesn't have an account? <a href="../Register/register.html"> Sign Up </a></p>
+                            <a href="../Forgot Password/forgot-password.html"> Forgotten your password?</a>
+                            <br>
+                            <br> 
+                    <div class="button" onclick="login() ">
+                        <input type="submit"  class="btn" value="Login">
+                        <p id="loginFailure"></p>
+                    </div>
+                </form>  
+            </div>     
+        </div>
+    </main>
+    <!-- footer -->
+        <footer class="footerLogin">
+            <p> &copy2023 IceRun By Petar Atanasov </p>
+            <i class="bx bxs-envelope"></i>
+            <p> <a href="mailto:PA673@live.mdx.ac.uk"> Contact Us</a> </p>       
+        </footer>  
+        <script src="../../JavaScript/script.js"></script>
+    </body>
+</html>
