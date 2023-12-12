@@ -1,21 +1,21 @@
 // Register validation 
 
-button.addEventListener("click", validationRegister);
+const idButton = document.getElementById("button");
+idButton.addEventListener("click", validationRegister);
 
 function validationRegister(){
     var result = document.getElementById("result")
-    var username = document.formInput.Username.value;
-    var email = document.formInput.Email.value;    
-    var password = document.formInput.Password.value;
-    var conPass = document.formInput.ConfPass.value
+    var username = document.formInput.Username.value.trim();
+    var email = document.formInput.Email.value.trim();    
+    var password = document.formInput.Password.value.trim();
+    var conPass = document.formInput.ConfPass.value.trim();
 
-    // console.log("the function executes");
      if(username === ""){
         result.innerHTML="Enter Username*";
         return false;
     } 
-    else if(username.length<5){
-        result.innerHTML= "At least five letters*";
+    else if(username.length < 5){
+        result.innerHTML= "Username at least five letters*";
         return false;
     }
     else if(email === ""){
@@ -27,7 +27,7 @@ function validationRegister(){
         return false;   
     }
     else if(password.length < 6){
-        result.innerHTML="Password must be 6-digits*";
+        result.innerHTML="Password must be at least 6-digits*";
         return false;        
     }
     else if(conPass === ""){
@@ -38,38 +38,54 @@ function validationRegister(){
         result.innerHTML="Password doesn't matched. Try again.*";
         return false;
     }
+
+    // var checkFiledsNotEmpty = username && email && password && conPass;
+    
+    // var regConfirm = checkFiledsNotEmpty && localStorage.getItem("name");      
+    
+    // document.getElementById("Greetings").innerHTML = regConfirm ? 
+    //   " <b> Registration successful. </b>" :
+    //   " <b> Registration is not successful. Try again. </b>"; 
+
+    storeUser();
+    return true; 
 }
 // Register local storage 
-button.addEventListener("click", storeUSer);
+// button.addEventListener("click", storeUser);
+window.localStorage = storeUser;
 function storeUser(/*event*/){
-     // event.preventDefault();
+    //  event.preventDefault();
 
     // DOM elements 
     var userName = document.formInput.Username.value;
     var emailAdr = document.formInput.Email.value;    
     var passWord = document.formInput.Password.value;
+    
+// to get the stored data form the use data
+    // const storedData = localStorage.getItem("name");
+// empty array for storring key names
+    let users = JSON.parse(localStorage.getItem("users"))|| [];
 
+    const userExist = users.find(user => user.username === userName || user.email === emailAdr);
+
+    if(userExist) {
+        alert("Username or email already exist");
+        return;
+    }
     // array to save the user
     var user = {
         username: userName,
         email: emailAdr,
         password: passWord,
-        topScore: 0
+        topScore: ""
     };
-// to get the stored data form the use data
-    const storedData = localStorage.getItem("userData");
-// empty array for storring key names
-    let users = [];
-
-    if(storedData) {
-        // set to [] if you don't get users
-        users = JSON.parse(storedData).users || [];
-    }
 // add the storing key names with  saving user 
     users.push(user);
-    localStorage.setItem("userData", JSON.stringify({users: users}));
+
+    localStorage.setItem("users", JSON.stringify( users));
+    alert("Registration successful");
     
-// get the unique naame of the user to an array and save all of the data 
+// get the unique ame of the user to an array and save all of the data 
     let keyNames = [];
     if (users.length > 0) {
         
@@ -80,15 +96,8 @@ function storeUser(/*event*/){
             keyNames.push(username);
             }
         });
-    }
-
-     if (localStorage.getItem("userData")){
-         document.getElementById("Greetings").innerHTML = " <b> Registration successful. </b>";  
-    } else {
-        document.getElementById("Greetings").innerHTML = " <b> Registration is not successful. Try again. </b>";
     } 
  } 
- 
 
 // Login Validation 
 function validationLogin(){
@@ -116,12 +125,13 @@ function validationLogin(){
 
 // Login Local Storage 
 window.onload = checkLogin;
+window.sessionStorage = checkLogin;
 
 function checkLogin(){
-    if (localStorage.loggedInUsrUsername !== undefined){
-        let userObj = JSON.parse(localStorage.getItem(localStorage.loggedInUsrUsername));
+    if (sessionStorage.loggedInUsrUsername !== undefined){
+        let userObj = JSON.parse(sessionStorage.getItem(sessionStorage.loggedInUsrUsername));
 
-        let loginWrapper = document.getElementById("loginWrapper");
+        let loginWrapper = document.getElementById("loginWrapper");     
         
         if(loginWrapper){
             loginWrapper.innerHTML=" Welcome back, " + userObj.username + ".";
@@ -132,7 +142,7 @@ function checkLogin(){
 function login(/*event*/){
     // event.preventDefault();
     let username = document.formInput.Username.value;
-    let userObj = JSON.parse(localStorage.getItem(username));
+    let userObj = JSON.parse(sessionStorage.getItem(username));
    
     if(!userObj){
         document.getElementById("loginFailure").innerHTML = "Username not recognized. Do you have an account?";
@@ -150,7 +160,7 @@ function login(/*event*/){
         document.getElementsById("loginFailure").innerHTML = "";
         document.getElementById("result").innerHTML ="";
 
-        localStorage.loggedInUsrUsername = userObj.username;
+        sessionStorage.loggedInUsrUsername = userObj.username;
     } else {
         document.getElementById("loginFailure").innerHTML = "Password not correct. Please try again. ";
         }
