@@ -4,13 +4,13 @@ canvas.height = 576;
 
 const context = canvas.getContext("2d");
 
-const gravity = 1.7
+const gravity = 1.7;
 
 // get the images 
 const background = document.getElementById("background");
 background.setAttribute("width", 1024);
 background.setAttribute("height", 576);
-const ground = document.getElementById("obstacle");
+const obstacleSmall = document.getElementById("obstacle");
 const platform = document.getElementById("platform");
 const pineTree = document.getElementById("three");
 
@@ -28,24 +28,24 @@ class Player {
             x: 0, y: 0
         }
         //the size of my figure 
-        this.width = 50
-        this.height = 50
+        this.width = 50;
+        this.height = 50;
     }
     // displaying the figure in my canvas 
     draw(){
-        context.fillStyle = 'blue'
+        context.fillStyle = 'blue';
         context.fillRect(this.position.x, this.position.y,
-        this.width, this.height)   
+        this.width, this.height); 
     }
 
     update(){
         this.draw() 
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
         
         if (this.position.y + this.height +
             this.velocity.y <= canvas.height){
-            this.velocity.y += gravity 
+            this.velocity.y += gravity;
         }
     }
 }
@@ -55,30 +55,30 @@ class Obstacle {
     constructor({x, y, image}) {
       this.position = {
         x, y
-      }
-      this.image = image
-      this.width = image.width
-      this.height = image.height
+      };
+      this.image = image;
+      this.width = image.width;
+      this.height = image.height;
     }
 // takes and image and draw it using possitions 
     draw() {
         context.drawImage(this.image, this.position.x,
-            this.position.y)
+            this.position.y);
     }
 }
 class sceneryObj {
     constructor({x, y, image}) {
       this.position = { 
         x, y
-      }
-      this.image = image
-      this.width = image.width
-      this.height = image.height
+      };
+      this.image = image;
+      this.width = image.width;
+      this.height = image.height;
     }
 
     draw() {
         context.drawImage(this.image, this.position.x,
-            this.position.y, this.width, this.height)
+            this.position.y, this.width, this.height);
     }
 }
 // pass the class player to the object 
@@ -86,80 +86,92 @@ let player = new Player()
 
 // pass the class obstacles to the object which in our scenario are used for floor 
 let obstacles = [
-    new Obstacle({
-        x: -50, y: 460, image: platform
-    }),
-    new Obstacle({
-        x: platform.width - 155, y: 460, image: platform
-    }),
-    // get a gap between the platform to be used for death pits 
-    new Obstacle({
-        x: platform.width * 2 + 70, y: 460, image: platform
-    })
-]
-    let sceneObj = [ 
-        new sceneryObj({
-            x: 0, y: 0, image: background
-        }),
-        new sceneryObj({
-            x: -15, y: 40, image: pineTree
-        }),
-        new sceneryObj({
-            x: 220, y: 60, image: pineTree
-        }),
-        new sceneryObj({
-            x: 800, y: 60, image: pineTree
-        })
-    ]
+];
+let sceneObj = [ 
+];
 // pass the keyboard keys as a constant 
 const keys = {
-    right: { pressed: false },
-    left: {pressed: false }
+    right: { 
+        pressed: false 
+    },
+    left: {
+        pressed: false 
+    }
 }
 
-// initialize 
+// initialize and set back to start and then use it to restart as well  
 function init(){
  player = new Player()
 
  obstacles = [
     new Obstacle({
-        x: -50, y: 460, image: platform
+        x: platform.width + 500,
+        y: 200, 
+        image: obstacleSmall
     }),
     new Obstacle({
-        x: platform.width - 155, y: 460, image: platform
+        x: -50, 
+        y: 460, 
+        image: platform
     }),
     new Obstacle({
-        x: platform.width * 2 + 70, y: 460, image: platform
-    })
+        x: platform.width - 155, 
+        y: 460, image:
+        platform
+    }),
+    new Obstacle({
+        x: platform.width * 2 + 70,
+        y: 460, 
+        image: platform
+    }),
+    new Obstacle({
+        x: platform.width * 3 + 260,
+        y: 460, 
+        image: platform
+    }),
+    new Obstacle({
+        x: platform.width * 4 + 210 - 120,
+        y: 460, 
+        image: platform
+    }),
+    
 ]
      sceneObj = [ 
         new sceneryObj({
-            x: 0, y: 0, image: background
+            x: 0,
+            y: 0, 
+            image: background
         }),
         new sceneryObj({
-            x: -15, y: 40, image: pineTree
+            x: -15, 
+            y: 40,
+            image: pineTree
         }),
         new sceneryObj({
-            x: 220, y: 60, image: pineTree
+            x: 220, 
+            y: 60, 
+            image: pineTree
         }),
         new sceneryObj({
-            x: 800, y: 60, image: pineTree
+            x: 800, 
+            y: 60, 
+            image: pineTree
         })
     ]
 }
 //this function shows all of the animation thru the game 
  function animation() {
-    requestAnimationFrame(animation)
+    requestAnimationFrame(animation);
     // clearRect is cleaning the canvas and allows me to maintain the player 
-    context.fillStyle = 'white'
-    context.fillRect(0, 0, canvas.width, canvas.height)
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, canvas.width, canvas.height);
    
     sceneObj.forEach(sObj => {
-        sObj.draw()
+        sObj.draw();
     })
 
     obstacles.forEach((obstacle) => {
-        obstacle.draw()
+        obstacle.draw();
     }) 
     player.update()
     // condition for player movements with border
@@ -195,16 +207,18 @@ function init(){
             player.position.x + player.width >=
             obstacle.position.x && player.position.x <=
             obstacle.position.x + obstacle.width ){
-                player.velocity.y = 0
+                player.velocity.y = 0;
         }
     })
     // a condition set up to loose 
     if (player.position.y > canvas.height){
-       // initilize and set back to start
+       // initilize and set back to start 
        init()
     }
  }
+// call it back to restart the game with each bit connected 
 init()
+// call back to animate 
 animation()
 // get the keycode for keyboard keys
 window.addEventListener('keydown', ({ keyCode }) => {
@@ -213,17 +227,17 @@ window.addEventListener('keydown', ({ keyCode }) => {
     
         case 37:
             console.log('arrow-left')
-            keys.left.pressed = true
+            keys.left.pressed = true;
             break;
 
         case 38:
-            console.log('arrow-up')  
-            player.velocity.y -= 23.25
+            console.log('arrow-up')  // to jump
+            player.velocity.y -= 30;
             break; 
 
          case 39:
             console.log('arrow-right') 
-            keys.right.pressed = true
+            keys.right.pressed = true;
             break;   
    }
 }) 
@@ -234,17 +248,17 @@ window.addEventListener('keyup', ({ keyCode }) => {
      
         case 37:
             console.log('arrow-left')
-            keys.left.pressed = false
+            keys.left.pressed = false;
             break;
  
         case 38:
             console.log('arrow-up')  
-            player.velocity.y -= 20
+            // player.velocity.y -= 20;
             break; 
  
         case 39:
             console.log('arrow-right') 
-            keys.right.pressed = false 
+            keys.right.pressed = false ;
             break;   
     }
  }) 
