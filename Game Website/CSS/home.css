@@ -8,6 +8,15 @@
     padding: 0px;
     margin: 0px;
 } 
+// get the class of the images and do not display them in html
+.sprite-hidden{
+    display: none;
+}
+
+#background {
+    background-size: cover;
+
+}
 body {
     background-image: url(../images/web-backgorund-mountain-Adventure_Time.jpg);
     background-size: cover;
@@ -64,7 +73,7 @@ footer, p, a{
     font-family: Agbalumo;
 }
 footer > p > a:hover{
-    color: orange;
+    color: #ffa500;
 }
 footer i {
     position: relative;
@@ -84,7 +93,7 @@ footer i {
     padding-top: 12.05%;
 }
 .footerHelp {
-    padding-top: 9.95%;
+    padding-top: 16.35%;
 }
 .footerLeaderboard{
     padding-top: 17.05%
@@ -244,11 +253,7 @@ i, i, i{
 /* content game play page*/
 #myCanvas{
     border: 1px;
-    background-image: url(../images/web-backgorund-mountain-Adventure_Time.jpg);
-    background-size: cover;
     text-align: center;
-    width: 75%;
-    height: 30%;
     margin: -4% auto;
     padding: 0px auto; 
 }
