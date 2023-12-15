@@ -28,12 +28,12 @@ class Player {
             x: 0, y: 0
         }
         //the size of my figure 
-        this.width = 50;
-        this.height = 50;
+        this.width = 35;
+        this.height = 35;
     }
     // displaying the figure in my canvas 
     draw(){
-        context.fillStyle = 'blue';
+        context.fillStyle = 'orange';
         context.fillRect(this.position.x, this.position.y,
         this.width, this.height); 
     }
@@ -79,8 +79,6 @@ class sceneryObj {
     draw(playerVelocityX) {
         const parallaxShift = playerVelocityX * 0.65;
         this.position.x -= parallaxShift;
-        // context.drawImage(this.image, this.position.x,
-        //     this.position.y, this.width, this.height);
 
         for(let i = -1; i <= 1; i++){
             context.drawImage(
@@ -179,7 +177,6 @@ function init(){
     scrollToStepOut = 0;
 }
 
-
 //this function shows all of the animation thru the game 
  function animation() {
     requestAnimationFrame(animation);
@@ -245,13 +242,12 @@ function init(){
     
     // my win conditon
         if (scrollToStepOut > platform.width * 45 + 18000 + platform.width * 45 + 18000 ){
-            // alert(" You won the game. Congratulations!");
-            console.log("you Won.")
+            alert(" You won the game. Congratulations!");
         }
     // a condition set up to lose 
     if (player.position.y > canvas.height){
-        // alert("You lost the game. ");
-        console.log("You lost the game.")
+        alert("You lost the game. ");
+        
        // initilize and set back to start 
        init()
     }
