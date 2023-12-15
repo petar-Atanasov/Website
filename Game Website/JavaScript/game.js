@@ -1,6 +1,6 @@
 const canvas = document.getElementById("myCanvas"); 
 canvas.width = 1024;
-canvas.height = 576;
+canvas.height = 574;
 
 const context = canvas.getContext("2d");
 
@@ -12,13 +12,13 @@ background.setAttribute("width", 1024);
 background.setAttribute("height", 576);
 const obstacleSmall = document.getElementById("obstacle");
 const platform = document.getElementById("platform");
-const pineTree = document.getElementById("three");
+const platSmall = document.getElementById("smallPlat");
 
 // create the player 
 class Player {
     constructor() { 
         // player speed
-        this.speed = 6
+        this.speed = 3
         // player position
         this.position = {
             x: 140, y: 10
@@ -76,10 +76,27 @@ class sceneryObj {
       this.height = image.height;
     }
 
-    draw() {
-        context.drawImage(this.image, this.position.x,
-            this.position.y, this.width, this.height);
+    draw(playerVelocityX) {
+        const parallaxShift = playerVelocityX * 0.65;
+        this.position.x -= parallaxShift;
+        // context.drawImage(this.image, this.position.x,
+        //     this.position.y, this.width, this.height);
+
+        for(let i = -1; i <= 1; i++){
+            context.drawImage(
+                this.image, 
+                Math.ceil(this.position.x + i * this.width),
+                this.position.y,
+                this.width,
+                this.height);
+        }
+    if(this.position.x <= -this.width){
+        this.position.x += this.width;
+    } else if ( this.position.x >= canvas.width){
+        this.position.x -= this.width;
     }
+  }   
+    
 }
 // pass the class player to the object 
 let player = new Player()
@@ -98,6 +115,7 @@ const keys = {
         pressed: false 
     }
 }
+let scrollToStepOut = 0;
 
 // initialize and set back to start and then use it to restart as well  
 function init(){
@@ -105,7 +123,7 @@ function init(){
 
  obstacles = [
     new Obstacle({
-        x: platform.width + 500,
+        x: platform.width + 400,
         y: 200, 
         image: obstacleSmall
     }),
@@ -115,9 +133,24 @@ function init(){
         image: platform
     }),
     new Obstacle({
-        x: platform.width - 155, 
+        x: 775, 
+        y: 370, 
+        image: obstacleSmall
+    }),
+    new Obstacle({
+        x: platform.width - 305, 
         y: 460, image:
         platform
+    }),
+    new Obstacle({
+        x: platform.width * 2 + 260, 
+        y: 260, 
+        image: obstacleSmall
+    }),
+    new Obstacle({
+        x: platform.width * 2 + 320, 
+        y: 260, 
+        image: obstacleSmall
     }),
     new Obstacle({
         x: platform.width * 2 + 70,
@@ -138,36 +171,24 @@ function init(){
 ]
      sceneObj = [ 
         new sceneryObj({
-            x: 0,
-            y: 0, 
+            x: -1,
+            y: -1, 
             image: background
-        }),
-        new sceneryObj({
-            x: -15, 
-            y: 40,
-            image: pineTree
-        }),
-        new sceneryObj({
-            x: 220, 
-            y: 60, 
-            image: pineTree
-        }),
-        new sceneryObj({
-            x: 800, 
-            y: 60, 
-            image: pineTree
         })
     ]
+    scrollToStepOut = 0;
 }
+
+
 //this function shows all of the animation thru the game 
  function animation() {
     requestAnimationFrame(animation);
     // clearRect is cleaning the canvas and allows me to maintain the player 
-    context.fillStyle = 'white';
+    // context.fillStyle = 'white';
     context.fillRect(0, 0, canvas.width, canvas.height);
    
     sceneObj.forEach(sObj => {
-        sObj.draw();
+        sObj.draw(player.velocity.x);
     })
 
     obstacles.forEach((obstacle) => {
@@ -175,28 +196,39 @@ function init(){
     }) 
     player.update()
     // condition for player movements with border
-    if(keys.right.pressed && player.position.x < 950) {
+    if(keys.right.pressed && player.position.x < 750) {
         player.velocity.x = player.speed;
-    } else if (keys.left.pressed && player.position.x > 20){
+    } else if ((keys.left.pressed && player.position.x > 200)
+        // get rid of going out of the screen from the left side 
+        || (keys.left.pressed && scrollToStepOut === 0 
+        && player.position.x > 0)) 
+    {
         player.velocity.x = -player.speed;
     } else {
         player.velocity.x = 0;
 
         if(keys.right.pressed){
             obstacles.forEach((obstacle) => {
+                scrollToStepOut += player.speed
                 obstacle.position.x -= player.speed;
             })
               sceneObj.forEach(scnObj => {
+                // the speed of the objects which are going to move 
+                // with the player speed
                 scnObj.position.x -= player.speed * 0.55;
             })
-        } else if (keys.left.pressed){
+        } else if (keys.left.pressed && scrollToStepOut > 0){
             obstacles.forEach((obstacle) => {
+                scrollToStepOut -= player.speed;
                 obstacle.position.x += player.speed;
             })
             sceneObj.forEach(scnObj => {
+                // the speed of the objects which are going to move 
+                // with the player speed
                 scnObj.position.x += player.speed * 0.55;
             })  
         }
+        
     }
 // obstractacles collision detection 
     obstacles.forEach((obstacle) => {
@@ -210,8 +242,16 @@ function init(){
                 player.velocity.y = 0;
         }
     })
-    // a condition set up to loose 
+    
+    // my win conditon
+        if (scrollToStepOut > platform.width * 45 + 18000 + platform.width * 45 + 18000 ){
+            // alert(" You won the game. Congratulations!");
+            console.log("you Won.")
+        }
+    // a condition set up to lose 
     if (player.position.y > canvas.height){
+        // alert("You lost the game. ");
+        console.log("You lost the game.")
        // initilize and set back to start 
        init()
     }
@@ -247,17 +287,16 @@ window.addEventListener('keyup', ({ keyCode }) => {
     switch (keyCode) {
      
         case 37:
-            console.log('arrow-left')
+            console.log('arrow-left');
             keys.left.pressed = false;
             break;
  
         case 38:
-            console.log('arrow-up')  
-            // player.velocity.y -= 20;
+            console.log('arrow-up'); 
             break; 
  
         case 39:
-            console.log('arrow-right') 
+            console.log('arrow-right'); 
             keys.right.pressed = false ;
             break;   
     }
