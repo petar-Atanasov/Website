@@ -8,7 +8,7 @@
     padding: 0px;
     margin: 0px;
 } 
-// get the class of the images and do not display them in html
+/*  get the class of the images and do not display them in html */
 .sprite-hidden{
     display: none;
 }
